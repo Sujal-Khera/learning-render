@@ -2,14 +2,15 @@ import os
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import load_model
-from tensorflow.keras.applications import EfficientNetB0
-from tensorflow.keras.applications.efficientnet import preprocess_input
+from tensorflow.keras.applications import MobileNetV2
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from tensorflow.keras.preprocessing.image import img_to_array, load_img
 from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, Dropout, BatchNormalization
 from tensorflow.keras.models import Model
+import gc
 
 class WasteClassifier:
-    """Waste classification model using EfficientNetB0 with transfer learning"""
+    """Waste classification model using MobileNetV2 with transfer learning"""
     
     def __init__(self, model_path=None, num_classes=3):
         """
@@ -19,7 +20,7 @@ class WasteClassifier:
             model_path: Path to a saved model file
             num_classes: Number of waste categories to classify
         """
-        self.img_size = (224, 224)  # EfficientNet recommended input size
+        self.img_size = (224, 224)  # MobileNetV2 recommended input size
         self.model = None
         self.num_classes = num_classes
         self.class_labels = ['compostable', 'general_waste', 'recyclable']
@@ -32,8 +33,8 @@ class WasteClassifier:
     
     def _create_model(self):
         """Create and compile the model architecture"""
-        # Base EfficientNetB0 model (pre-trained on ImageNet)
-        base_model = EfficientNetB0(
+        # Base MobileNetV2 model (pre-trained on ImageNet)
+        base_model = MobileNetV2(
             input_shape=(224, 224, 3),
             include_top=False,
             weights='imagenet'
@@ -43,15 +44,10 @@ class WasteClassifier:
         for layer in base_model.layers:
             layer.trainable = False
         
-        # Add custom classification layers with BatchNormalization
+        # Add custom classification layers
         x = base_model.output
         x = GlobalAveragePooling2D()(x)
-        x = BatchNormalization()(x)
-        x = Dense(512, activation='relu')(x)
-        x = BatchNormalization()(x)
-        x = Dropout(0.5)(x)
         x = Dense(256, activation='relu')(x)
-        x = BatchNormalization()(x)
         x = Dropout(0.3)(x)
         predictions = Dense(self.num_classes, activation='softmax')(x)
         
@@ -70,6 +66,13 @@ class WasteClassifier:
     def load_model(self, model_path):
         """Load a saved model from disk"""
         try:
+            # Clear any existing model
+            if self.model is not None:
+                del self.model
+                gc.collect()
+                tf.keras.backend.clear_session()
+            
+            # Load new model
             self.model = load_model(model_path)
             print(f"Model loaded successfully from {model_path}")
         except Exception as e:
@@ -171,19 +174,31 @@ class WasteClassifier:
         if not self.model:
             raise ValueError("Model not loaded. Please load or train a model first.")
         
-        # Process image if a file path is provided
-        if isinstance(image, str):
-            image = self.preprocess_image(image)
-        
-        # Get predictions
-        predictions = self.model.predict(image)
-        
-        # Get class with highest confidence
-        predicted_class = np.argmax(predictions[0])
-        confidence = float(predictions[0][predicted_class])
-        class_label = self.class_labels[predicted_class]
-        
-        return class_label, predicted_class, confidence
+        try:
+            # Process image if a file path is provided
+            if isinstance(image, str):
+                image = self.preprocess_image(image)
+            
+            # Get predictions
+            predictions = self.model.predict(image)
+            
+            # Get class with highest confidence
+            predicted_class = np.argmax(predictions[0])
+            confidence = float(predictions[0][predicted_class])
+            class_label = self.class_labels[predicted_class]
+            
+            # Clean up
+            del predictions
+            gc.collect()
+            tf.keras.backend.clear_session()
+            
+            return class_label, predicted_class, confidence
+        except Exception as e:
+            print(f"Error during prediction: {str(e)}")
+            # Clean up
+            gc.collect()
+            tf.keras.backend.clear_session()
+            raise e
     
     def evaluate(self, test_data):
         """

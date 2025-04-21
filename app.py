@@ -13,10 +13,9 @@ from database.models import User, Scan, RecyclingLocation, Product
 
 from models.classifier import WasteClassifier
 
-# # Load model once at startup
-model_path = 'models/saved_model/waste_classifier.h5'
-waste_classifier = WasteClassifier(model_path=model_path)
-
+# Remove the global model loading
+# model_path = 'models/saved_model/waste_classifier.h5'
+# waste_classifier = WasteClassifier(model_path=model_path)
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -26,6 +25,11 @@ init_db(app)
 
 # Ensure upload directory exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+# Create a function to get the classifier
+def get_classifier():
+    model_path = app.config['MODEL_PATH']
+    return WasteClassifier(model_path=model_path)
 
 # Login required decorator
 def login_required(f):
@@ -298,8 +302,11 @@ def classification_dashboard():
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
             
+            # Get classifier instance
+            classifier = get_classifier()
+            
             # Process image for classification
-            class_label, class_index, confidence = waste_classifier.predict(filepath)
+            class_label, class_index, confidence = classifier.predict(filepath)
             
             # Save scan to database if user is logged in
             if 'user_id' in session:
@@ -346,12 +353,8 @@ def api_classify():
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
             
-            # Process image for classification using your trained model
-            from models.classifier import WasteClassifier
-            
-            # Load the model (better to do this once at app startup)
-            model_path = 'models/saved_model/waste_classifier.h5'
-            classifier = WasteClassifier(model_path=model_path)
+            # Get classifier instance
+            classifier = get_classifier()
             
             # Get prediction
             class_label, class_index, confidence = classifier.predict(filepath)
