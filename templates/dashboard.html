@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard - Waste to Value</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <!-- Internal CSS -->
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3e6cb);
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    .navbar {
+      background: linear-gradient(to right, #28a745, #50e3c2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .navbar-brand {
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.5em;
+      letter-spacing: 1px;
+    }
+
+    .nav-link {
+      color: #fff !important;
+      font-weight: 400;
+      transition: color 0.3s ease, transform 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: #ffd700 !important;
+      transform: translateY(-2px);
+    }
+
+    .container {
+      padding-top: 60px;
+      padding-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .dashboard-header {
+      font-size: 2.8em;
+      font-weight: 700;
+      color: #2e7d32;
+      text-shadow: 0 2px 6px rgba(46, 125, 50, 0.3);
+      text-align: center;
+      margin-bottom: 30px;
+      animation: slideIn 1s ease-out forwards;
+    }
+
+    .dashboard-content {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      max-width: 600px;
+      width: 100%;
+      border: 1px solid #c8e6c9;
+      animation: fadeInUp 1s ease-out forwards;
+      overflow: hidden;
+    }
+
+    .welcome-card {
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .welcome-card h3 {
+      font-size: 1.5em;
+      color: #2e7d32;
+      margin-bottom: 10px;
+    }
+
+    .welcome-card p {
+      font-size: 1em;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .dashboard-options {
+      list-style: none;
+      padding: 0;
+    }
+
+    .dashboard-options li {
+      margin-bottom: 15px;
+    }
+
+    .btn-custom {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 12px 20px;
+      background: linear-gradient(90deg, #28a745, #4caf50);
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      font-size: 1.1em;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-custom:hover {
+      background: linear-gradient(90deg, #4caf50, #28a745);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
+    }
+
+    .btn-custom::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+    }
+
+    .btn-custom:hover::after {
+      width: 300px;
+      height: 300px;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .dashboard-header {
+        font-size: 2.2em;
+      }
+
+      .dashboard-content {
+        padding: 20px;
+        width: 90%;
+      }
+
+      .btn-custom {
+        font-size: 1em;
+        padding: 10px 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .dashboard-header {
+        font-size: 1.8em;
+      }
+
+      .dashboard-content {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+      <div class="container">
+          <h1>Waste to Value</h1>
+          <nav>
+              <ul>
+                  <li><a href="{{ url_for('index') }}">Home</a></li>
+                  <li><a href="{{ url_for('marketplace') }}">Marketplace</a></li>
+                  <li><a href="{{ url_for('classification_dashboard') }}">Classify</a></li>
+                  <li><a href="{{ url_for('dashboard') }}" class="active">Dashboard</a></li>
+                  <li><a href="{{ url_for('logout') }}">Logout</a></li>
+              </ul>
+          </nav>
+      </div>
+  </header>
+
+  <main>
+      <section class="dashboard-welcome">
+          <div class="container">
+              <h2>Welcome, {{ user.username }}</h2>
+              <p>This is your personalized space. From here, you can manage your activities and explore sustainable options:</p>
+          </div>
+      </section>
+
+      <section class="dashboard-stats">
+          <div class="container">
+              <h2>Your Impact</h2>
+              <div class="stats-container">
+                  {% set scan_count = user.scans|length %}
+                  {% set recycled_count = user.scans|selectattr('classification', 'equalto', 'recyclable')|list|length %}
+                  {% set compost_count = user.scans|selectattr('classification', 'equalto', 'compostable')|list|length %}
+                  {% set general_count = user.scans|selectattr('classification', 'equalto', 'general_waste')|list|length %}
+                  
+                  <div class="stat-card">
+                      <h3>{{ scan_count }}</h3>
+                      <p>Total Scans</p>
+                  </div>
+                  <div class="stat-card">
+                      <h3>{{ recycled_count }}</h3>
+                      <p>Items Recycled</p>
+                  </div>
+                  <div class="stat-card">
+                      <h3>{{ compost_count }}</h3>
+                      <p>Items Composted</p>
+                  </div>
+                  <div class="stat-card">
+                      <h3>{{ general_count }}</h3>
+                      <p>General Waste</p>
+                  </div>
+              </div>
+          </div>
+      </section>
+
+      <section class="dashboard-actions">
+          <div class="container">
+              <h2>Quick Actions</h2>
+              <div class="actions-container">
+                  <a href="{{ url_for('classification_dashboard') }}" class="action-card">
+                      <h3>Classify Waste</h3>
+                      <p>Upload an image to identify waste type</p>
+                  </a>
+                  <a href="{{ url_for('marketplace') }}" class="action-card">
+                      <h3>Browse Marketplace</h3>
+                      <p>Shop sustainable products</p>
+                  </a>
+                  <a href="{{ url_for('seller_dashboard') }}" class="action-card">
+                      <h3>Sell Items</h3>
+                      <p>List your recycled products</p>
+                  </a>
+              </div>
+          </div>
+      </section>
+
+      <section class="recent-activity">
+          <div class="container">
+              <h2>Recent Activity</h2>
+              <div class="activity-tabs">
+                  <button class="tab-button active" data-tab="scans">Recent Scans</button>
+                  <button class="tab-button" data-tab="products">Your Products</button>
+              </div>
+              
+              <div class="tab-content active" id="scans-tab">
+                  {% if user.scans %}
+                      <div class="activity-list">
+                          {% for scan in user.scans|sort(attribute='created_at', reverse=true)[:5] %}
+                          <div class="activity-item">
+                              <div class="activity-image">
+                                  <img src="{{ url_for('static', filename=scan.image_path) }}" alt="Waste scan">
+                              </div>
+                              <div class="activity-details">
+                                  <h4>{{ scan.classification|title }}</h4>
+                                  <p>Confidence: {{ "%.2f"|format(scan.confidence*100) }}%</p>
+                                  <p>{{ scan.created_at.strftime('%B %d, %Y at %I:%M %p') }}</p>
+                                  {% if not scan.products %}
+                                  <button class="create-product-btn" data-scan-id="{{ scan.id }}" data-classification="{{ scan.classification }}">
+                                      Create Product
+                                  </button>
+                                  {% endif %}
+                              </div>
+                          </div>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      <p class="no-activity">You haven't scanned any waste yet. <a href="{{ url_for('classification_dashboard') }}">Start classifying</a>!</p>
+                  {% endif %}
+              </div>
+              
+              <div class="tab-content" id="products-tab">
+                  {% if user.products %}
+                      <div class="activity-list">
+                          {% for product in user.products|sort(attribute='created_at', reverse=true) %}
+                          <div class="activity-item">
+                              <div class="activity-image">
+                                  <img src="{{ url_for('static', filename=product.image_path) }}" alt="{{ product.title }}">
+                              </div>
+                              <div class="activity-details">
+                                  <h4>{{ product.title }}</h4>
+                                  <p>${{ "%.2f"|format(product.price) }}</p>
+                                  <p>{{ product.waste_type|title }}</p>
+                                  <p>Listed on {{ product.created_at.strftime('%B %d, %Y') }}</p>
+                                  <a href="{{ url_for('product_detail', product_id=product.id) }}" class="view-product-btn">View Product</a>
+                              </div>
+                          </div>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      <p class="no-activity">You haven't created any products yet. <a href="{{ url_for('classification_dashboard') }}">Classify waste</a> to create products!</p>
+                  {% endif %}
+              </div>
+          </div>
+      </section>
+  </main>
+
+  <div id="create-product-modal" class="modal">
+      <div class="modal-content">
+          <span class="close-modal">&times;</span>
+          <h2>Create Product</h2>
+          <form id="create-product-form">
+              <input type="hidden" id="scan_id" name="scan_id">
+              <div class="form-group">
+                  <label for="title">Product Title</label>
+                  <input type="text" id="title" name="title" required>
+              </div>
+              <div class="form-group">
+                  <label for="description">Description</label>
+                  <textarea id="description" name="description" rows="4" required></textarea>
+              </div>
+              <div class="form-group">
+                  <label for="price">Price ($)</label>
+                  <input type="number" id="price" name="price" step="0.01" min="0.01" required>
+              </div>
+              <button type="submit" class="btn primary">Create Product</button>
+          </form>
+          <div id="form-message"></div>
+      </div>
+  </div>
+
+  <footer>
+      <div class="container">
+          <p>&copy; 2025 Waste to Value. All rights reserved.</p>
+      </div>
+  </footer>
+
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          // Tab functionality
+          const tabButtons = document.querySelectorAll('.tab-button');
+          const tabContents = document.querySelectorAll('.tab-content');
+          
+          tabButtons.forEach(button => {
+              button.addEventListener('click', function() {
+                  // Remove active class from all buttons and contents
+                  tabButtons.forEach(btn => btn.classList.remove('active'));
+                  tabContents.forEach(content => content.classList.remove('active'));
+                  
+                  // Add active class to clicked button
+                  this.classList.add('active');
+                  
+                  // Show corresponding content
+                  const tabId = this.getAttribute('data-tab');
+                  document.getElementById(tabId + '-tab').classList.add('active');
+              });
+          });
+          
+          // Modal functionality
+          const modal = document.getElementById('create-product-modal');
+          const createButtons = document.querySelectorAll('.create-product-btn');
+          const closeModal = document.querySelector('.close-modal');
+          const productForm = document.getElementById('create-product-form');
+          const formMessage = document.getElementById('form-message');
+          
+          createButtons.forEach(button => {
+              button.addEventListener('click', function() {
+                  const scanId = this.getAttribute('data-scan-id');
+                  const classification = this.getAttribute('data-classification');
+                  
+                  // Set form values
+                  document.getElementById('scan_id').value = scanId;
+                  
+                  // Suggest title based on classification
+                  let titleSuggestion = '';
+                  if (classification === 'recyclable') {
+                      titleSuggestion = 'Recycled Material';
+                  } else if (classification === 'compostable') {
+                      titleSuggestion = 'Compost Material';
+                  } else {
+                      titleSuggestion = 'Upcycled Item';
+                  }
+                  document.getElementById('title').value = titleSuggestion;
+                  
+                  // Show modal
+                  modal.style.display = 'block';
+              });
+          });
+          
+          closeModal.addEventListener('click', function() {
+              modal.style.display = 'none';
+              formMessage.innerHTML = '';
+              productForm.reset();
+          });
+          
+          window.addEventListener('click', function(event) {
+              if (event.target === modal) {
+                  modal.style.display = 'none';
+                  formMessage.innerHTML = '';
+                  productForm.reset();
+              }
+          });
+          
+          // Form submission
+          productForm.addEventListener('submit', function(e) {
+              e.preventDefault();
+              
+              const scanId = document.getElementById('scan_id').value;
+              const title = document.getElementById('title').value;
+              const description = document.getElementById('description').value;
+              const price = document.getElementById('price').value;
+              
+              fetch('/api/create-product', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                      scan_id: scanId,
+                      title: title,
+                      description: description,
+                      price: price
+                  }),
+              })
+              .then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      formMessage.innerHTML = '<p class="success">Product created successfully!</p>';
+                      setTimeout(() => {
+                          window.location.reload();
+                      }, 1500);
+                  } else {
+                      formMessage.innerHTML = `<p class="error">Error: ${data.error}</p>`;
+                  }
+              })
+              .catch(error => {
+                  formMessage.innerHTML = '<p class="error">An error occurred. Please try again.</p>';
+                  console.error('Error:', error);
+              });
+          });
+      });
+  </script>
+</body>
+</html>

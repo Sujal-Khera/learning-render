@@ -1,0 +1,76 @@
+# Python virtual environment
+env/
+venv/
+ENV/
+.env
+.venv
+env.bak/
+venv.bak/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Large binary files
+*.pyd
+*.dll
+*.so
+*.dylib
+*.lib
+*.a
+*.o
+*.obj
+
+# Dataset and model files
+*.h5
+*.pkl
+*.model
+*.weights
+*.bin
+*.dat
+*.idx
+*.npy
+*.npz
+
+# Logs
+logs/
+*.log
+
+# Uploads
+uploads/
+*.jpeg
+*.jpg
+*.png
+*.webp
+*.gif
+*.bmp
+*.tiff
+
+# System files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDE specific files
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Local development settings
+instance/
+.webassets-cache
+
+# Flask stuff
+*.db
+*.sqlite3

@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco-Friendly Marketplace</title>
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        a {
+            color: #3498db;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        a:hover {
+            color: #2980b9;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 0;
+        }
+        
+        header h1 {
+            margin: 0;
+            color: white;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin-top: 10px;
+        }
+        
+        nav li {
+            margin-right: 20px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        
+        nav a:hover, nav a.active {
+            background-color: #3498db;
+        }
+        
+        /* Marketplace Styles */
+        .marketplace-hero {
+            background-color: white;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .filter-section {
+            background-color: white;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px 0;
+        }
+        
+        .filter-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        .sort-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sort-dropdown select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+        }
+        
+        .products-section {
+            background-color: white;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 40px 0;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-image {
+            position: relative;
+            height: 200px;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: white;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        
+        .recyclable {
+            background-color: #27ae60;
+        }
+        
+        .compostable {
+            background-color: #f39c12;
+        }
+        
+        .general_waste {
+            background-color: #e74c3c;
+        }
+        
+        .product-info {
+            padding: 20px;
+        }
+        
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #3498db;
+            margin: 10px 0;
+        }
+        
+        .product-seller {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .product-actions {
+            margin-top: 15px;
+        }
+        
+        .no-products {
+            text-align: center;
+            padding: 30px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        
+        /* Cart Styles */
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            margin-left: 20px;
+        }
+        
+        .cart-icon:before {
+            content: '🛒';
+            font-size: 1.5rem;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+        
+        #cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 350px;
+            max-width: 100%;
+            height: 100%;
+            background-color: white;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        #cart-sidebar.open {
+            right: 0;
+        }
+        
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        #close-cart {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        #cart-items {
+            padding: 20px;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .cart-item-details h4 {
+            margin: 0;
+            font-size: 1rem;
+        }
+        
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .quantity-btn {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background-color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .remove-btn {
+            background: none;
+            border: none;
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-left: 5px;
+        }
+        
+        #cart-total {
+            padding: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            color: #7f8c8d;
+            padding: 20px 0;
+        }
+        
+        /* Footer Styles */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+            }
+            
+            nav li {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            
+            .filter-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            #cart-sidebar {
+                width: 100%;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            header .container {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            nav ul {
+                margin-top: 0;
+            }
+            
+            .header-right {
+                display: flex;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Waste to Value</h1>
+            <div class="header-right">
+                <nav>
+                    <ul>
+                        <li><a href="{{ url_for('index') }}">Home</a></li>
+                        <li><a href="{{ url_for('classification_dashboard') }}">Classify</a></li>
+                        <li><a href="{{ url_for('marketplace') }}" class="active">Marketplace</a></li>
+                        {% if 'user_id' in session %}
+                            <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                        {% else %}
+                            <li><a href="{{ url_for('login') }}">Login</a></li>
+                            <li><a href="{{ url_for('register') }}">Register</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                <div class="cart-icon">
+                    <span class="cart-count">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="marketplace-hero">
+            <div class="container">
+                <h2>Eco-Friendly Marketplace</h2>
+                <p>Shop sustainable products made from recycled materials</p>
+            </div>
+        </section>
+
+        <section class="filter-section">
+            <div class="container">
+                <div class="filter-container">
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">All Categories</button>
+                        <button class="filter-btn" data-filter="recyclable">Recycled Products</button>
+                        <button class="filter-btn" data-filter="compostable">Compostable Products</button>
+                        <button class="filter-btn" data-filter="general_waste">Upcycled Products</button>
+                    </div>
+                    <div class="sort-dropdown">
+                        <label for="sort-select">Sort By</label>
+                        <select id="sort-select">
+                            <option value="recent">Most Recent</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="name">Name</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="products-section">
+            <div class="container">
+                <div class="products-grid" id="products-grid">
+                    {% for product in products %}
+                    <div class="product-card" data-category="{{ product.waste_type }}" data-price="{{ product.price }}" data-name="{{ product.title }}">
+                        <div class="product-image">
+                            {% if 'marketplace/' in product.image %}
+                                <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.title }}">
+                            {% else %}
+                                <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.title }}">
+                            {% endif %}
+                            <div class="product-badge {{ product.waste_type }}">{{ product.waste_type }}</div>
+                        </div>
+                        <div class="product-info">
+                            <h3>{{ product.title }}</h3>
+                            <p class="product-price">${{ "%.2f"|format(product.price) }}</p>
+                            <p class="product-seller">Seller: {{ product.seller }}</p>
+                            <div class="product-actions">
+                                <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn">View Details</a>
+                                <button class="btn add-to-cart" data-id="{{ product.id }}" data-title="{{ product.title }}" data-price="{{ product.price }}">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                {% if not products %}
+                <div class="no-products">
+                    <p>No products available yet. <a href="{{ url_for('classification_dashboard') }}">Classify some waste</a> to add products!</p>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+    </main>
+
+    <div id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button id="close-cart">&times;</button>
+        </div>
+        <div id="cart-items">
+            <!-- Cart items will be displayed here -->
+        </div>
+        <div id="cart-total">
+            <p>Total: <span id="cart-total-amount">$0.00</span></p>
+            <button id="checkout-btn" class="btn">Checkout</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Waste to Value. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const productCards = document.querySelectorAll('.product-card');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    const filter = this.getAttribute('data-filter');
+                    
+                    // Show/hide products based on filter
+                    productCards.forEach(card => {
+                        if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Sort functionality
+            const sortSelect = document.getElementById('sort-select');
+            const productsGrid = document.getElementById('products-grid');
+            
+            sortSelect.addEventListener('change', function() {
+                const sortValue = this.value;
+                const productsArray = Array.from(productCards);
+                
+                productsArray.sort((a, b) => {
+                    if (sortValue === 'price-low') {
+                        return parseFloat(a.getAttribute('data-price')) - parseFloat(b.getAttribute('data-price'));
+                    } else if (sortValue === 'price-high') {
+                        return parseFloat(b.getAttribute('data-price')) - parseFloat(a.getAttribute('data-price'));
+                    } else if (sortValue === 'name') {
+                        return a.getAttribute('data-name').localeCompare(b.getAttribute('data-name'));
+                    } else {
+                        // Default to most recent (original order)
+                        return 0;
+                    }
+                });
+                
+                // Re-append sorted products
+                productsArray.forEach(product => {
+                    productsGrid.appendChild(product);
+                });
+            });
+            
+            // Cart functionality
+            const cartIcon = document.querySelector('.cart-icon');
+            const cartSidebar = document.getElementById('cart-sidebar');
+            const closeCart = document.getElementById('close-cart');
+            const cartItems = document.getElementById('cart-items');
+            const cartTotalAmount = document.getElementById('cart-total-amount');
+            const cartCount = document.querySelector('.cart-count');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            
+            let cart = [];
+            
+            // Show/hide cart
+            cartIcon.addEventListener('click', function() {
+                cartSidebar.classList.toggle('open');
+            });
+            
+            closeCart.addEventListener('click', function() {
+                cartSidebar.classList.remove('open');
+            });
+            
+            // Add to cart
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = this.getAttribute('data-id');
+                    const productTitle = this.getAttribute('data-title');
+                    const productPrice = parseFloat(this.getAttribute('data-price'));
+                    
+                    // Check if product is already in cart
+                    const existingItem = cart.find(item => item.id === productId);
+                    
+                    if (existingItem) {
+                        existingItem.quantity += 1;
+                    } else {
+                        cart.push({
+                            id: productId,
+                            title: productTitle,
+                            price: productPrice,
+                            quantity: 1
+                        });
+                    }
+                    
+                    updateCart();
+                    cartSidebar.classList.add('open');
+                });
+            });
+            
+            // Update cart display
+            function updateCart() {
+                cartItems.innerHTML = '';
+                let total = 0;
+                
+                cart.forEach((item, index) => {
+                    total += item.price * item.quantity;
+                    
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
+                        <div class="cart-item-details">
+                            <h4>${item.title}</h4>
+                            <p>$${item.price.toFixed(2)} x ${item.quantity}</p>
+                        </div>
+                        <div class="cart-item-actions">
+                            <button class="quantity-btn decrease" data-index="${index}">-</button>
+                            <span class="quantity">${item.quantity}</span>
+                            <button class="quantity-btn increase" data-index="${index}">+</button>
+                            <button class="remove-btn" data-index="${index}">&times;</button>
+                        </div>
+                    `;
+                    
+                    cartItems.appendChild(cartItem);
+                });
+                
+                if (cart.length === 0) {
+                    cartItems.innerHTML = '<p class="empty-cart">Your cart is empty</p>';
+                }
+                
+                cartTotalAmount.textContent = `$${total.toFixed(2)}`;
+                cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+                
+                // Add event listeners to cart item buttons
+                document.querySelectorAll('.quantity-btn.decrease').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        if (cart[index].quantity > 1) {
+                            cart[index].quantity -= 1;
+                        } else {
+                            cart.splice(index, 1);
+                        }
+                        updateCart();
+                    });
+                });
+                
+                document.querySelectorAll('.quantity-btn.increase').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        cart[index].quantity += 1;
+                        updateCart();
+                    });
+                });
+                
+                document.querySelectorAll('.remove-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        cart.splice(index, 1);
+                        updateCart();
+                    });
+                });
+            }
+            
+            // Checkout
+            checkoutBtn.addEventListener('click', function() {
+                if (cart.length === 0) {
+                    alert('Your cart is empty!');
+                    return;
+                }
+                
+                alert('Thank you for your purchase! This is a demo, so no actual purchase will be processed.');
+                cart = [];
+                updateCart();
+                cartSidebar.classList.remove('open');
+            });
+        });
+    </script>
+</body>
+</html>
